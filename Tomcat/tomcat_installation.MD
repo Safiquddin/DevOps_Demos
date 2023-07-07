@@ -24,21 +24,9 @@ Set the tomcat user as the owner of the $CATALINA_HOME folder.
 ```sh 
 chown -R tomcat.tomcat /opt/apache-tomcat-8.5.6
 ```
-Install Tomcat as a service on Linux
+
 Download Tomcat from the Apache website.
-Unpack in /opt/apache-tomcat-x.y.z. E.g. /opt/apache-tomcat-8.5.6.
 You'll need a terminal and root access.
-
-Create Tomcat user with restricted permissions
-This is the user the Tomcat service will run as.
-
-groupadd tomcat
-useradd -s /sbin/nologin -g tomcat -d /opt/apache-tomcat-8.5.6 tomcat
-passwd tomcat
-Set the tomcat user as the owner of the $CATALINA_HOME folder.
-
-chown -R tomcat.tomcat /opt/apache-tomcat-8.5.6
-
 
 ```sh 
   # create tomcat directory
@@ -96,7 +84,7 @@ goto tomcat home directory and Add below users to conf/tomcat-user.xml file
 	<user username="tomcat" password="s3cret" roles="manager-gui"/>
 ```
 Restart serivce and try to login to tomcat application from the browser. This time it should be Successful
-
+Install Tomcat as a service on Linux
 Using systemd
 Add /etc/systemd/system/tomcat.service init script:
 
