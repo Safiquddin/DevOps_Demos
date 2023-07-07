@@ -31,7 +31,8 @@ Create a new user for ansible administration & grant admin access to user (Maste
 useradd ansadmin
 passwd ansadmin
 # below command addes ansadmin to sudoers file. But strongly recommended to use "visudo" command if you are aware vi or nano editor. 
-echo "ansadmin ALL=(ALL) ALL" >> /etc/sudoers
+echo "ansadmin ALL=(ALL)   NOPASSWD: ALL" >> /etc/sudoers
+
 ```
 
 Using keybased authentication is advised. If you are still at learning stage use password based authentication (Master & Slave)
