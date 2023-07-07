@@ -96,20 +96,18 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
+
+
+Environment=CATALINA_PID=/opt/apache-tomcat-8.5.35/temp/tomcat.pid
+
+ExecStart=/opt/apache-tomcat-8.5.35/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+
 User=tomcat
 Group=tomcat
-
-Environment=JAVA_HOME=/usr/lib/jvm/jre
-Environment=CATALINA_PID=/opt/apache-tomcat-8.5.6/temp/tomcat.pid
-Environment=CATALINA_HOME=/opt/apache-tomcat-8.5.6
-Environment=CATALINA_BASE=/opt/apache-tomcat-8.5.6
-Environment=CATALINA_OPTS=
-Environment="JAVA_OPTS=-Dfile.encoding=UTF-8 -Dnet.sf.ehcache.skipUpdateCheck=true \
--XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled \
--XX:+UseParNewGC -Xms2g -Xmx4g"
-
-ExecStart=/opt/apache-tomcat-8.5.6/bin/startup.sh
-ExecStop=/bin/kill -15 $MAINPID
+UMask=0007
+RestartSec=10
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
