@@ -6,6 +6,23 @@
 
 ### Install Apache Tomcat
 Download tomcat packages from  https://tomcat.apache.org/download-80.cgi onto /opt on EC2 instance
+
+Install Tomcat as a service on Linux
+Download Tomcat from the Apache website.
+Unpack in /opt/apache-tomcat-x.y.z. E.g. /opt/apache-tomcat-8.5.6.
+You'll need a terminal and root access.
+
+Create Tomcat user with restricted permissions
+This is the user the Tomcat service will run as.
+
+groupadd tomcat
+useradd -s /sbin/nologin -g tomcat -d /opt/apache-tomcat-8.5.6 tomcat
+passwd tomcat
+Set the tomcat user as the owner of the $CATALINA_HOME folder.
+
+chown -R tomcat.tomcat /opt/apache-tomcat-8.5.6
+
+
 ```sh 
   # create tomcat directory
   cd /opt
@@ -63,3 +80,44 @@ goto tomcat home directory and Add below users to conf/tomcat-user.xml file
 ```
 Restart serivce and try to login to tomcat application from the browser. This time it should be Successful
 
+Using systemd
+Add /etc/systemd/system/tomcat.service init script:
+
+# Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=tomcat
+Group=tomcat
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+Environment=CATALINA_PID=/opt/apache-tomcat-8.5.6/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/apache-tomcat-8.5.6
+Environment=CATALINA_BASE=/opt/apache-tomcat-8.5.6
+Environment=CATALINA_OPTS=
+Environment="JAVA_OPTS=-Dfile.encoding=UTF-8 -Dnet.sf.ehcache.skipUpdateCheck=true \
+-XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled \
+-XX:+UseParNewGC -Xms2g -Xmx4g"
+
+ExecStart=/opt/apache-tomcat-8.5.6/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+The script tells the system to run the service as the tomcat user with the specified configs.
+
+Reload Systemd in order to discover and load the new Tomcat service file:
+
+systemctl daemon-reload
+Enable the service to start at boot:
+
+systemctl enable tomcat.service
+To control the service:
+
+service tomcat [start | stop | restart | status]
+Or with Systemd directly:
+
+systemctl [start | stop | restart | status] tomcat
