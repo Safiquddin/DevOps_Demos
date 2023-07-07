@@ -15,14 +15,15 @@ Download tomcat packages from  https://tomcat.apache.org/download-80.cgi onto /o
 
 Create Tomcat user with restricted permissions
 This is the user the Tomcat service will run as.
-
+```sh 
 groupadd tomcat
 useradd -s /sbin/nologin -g tomcat -d /opt/apache-tomcat-8.5.6 tomcat
 passwd tomcat
+```
 Set the tomcat user as the owner of the $CATALINA_HOME folder.
-
+```sh 
 chown -R tomcat.tomcat /opt/apache-tomcat-8.5.6
-
+```
 Install Tomcat as a service on Linux
 Download Tomcat from the Apache website.
 Unpack in /opt/apache-tomcat-x.y.z. E.g. /opt/apache-tomcat-8.5.6.
