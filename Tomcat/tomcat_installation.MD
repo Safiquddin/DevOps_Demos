@@ -84,6 +84,7 @@ Using systemd
 Add /etc/systemd/system/tomcat.service init script:
 
 # Systemd unit file for tomcat
+```sh
 [Unit]
 Description=Apache Tomcat Web Application Container
 After=syslog.target network.target
@@ -107,6 +108,7 @@ ExecStop=/bin/kill -15 $MAINPID
 
 [Install]
 WantedBy=multi-user.target
+```
 The script tells the system to run the service as the tomcat user with the specified configs.
 
 Reload Systemd in order to discover and load the new Tomcat service file:
