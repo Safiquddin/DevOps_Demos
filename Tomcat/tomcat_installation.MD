@@ -4,6 +4,12 @@
 ### Prerequisites
 1. EC2 instance with Java v1.8.x 
 
+### Install Java
+We will be using open java for our demo, Get latest version from http://openjdk.java.net/install/
+```sh 
+yum install java-1.8*
+#yum -y install java-1.8.0-openjdk
+```
 ### Install Apache Tomcat
 Download tomcat packages from  https://tomcat.apache.org/download-80.cgi onto /opt on EC2 instance
 
