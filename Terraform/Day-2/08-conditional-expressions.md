@@ -91,6 +91,7 @@ resource "null_resource" "custom_trigger" {
   }
 
   provisioner "local-exec" {
+    # when    = "triggered"
     command = "echo Custom trigger executed"
   }
 }
