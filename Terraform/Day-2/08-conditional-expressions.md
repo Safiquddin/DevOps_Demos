@@ -82,4 +82,18 @@ resource "aws_security_group" "example" {
 
 In this example, the `ingress` block within the `aws_security_group` resource uses a conditional expression to control whether SSH access is allowed. If `enable_ssh` is `true`, it allows SSH traffic from any source (`"0.0.0.0/0"`); otherwise, it allows no inbound traffic.
 
+## Custom Triggers with null_resource:
+You can use the null_resource resource type to create custom triggers. While this isn't a common use case, it allows you to trigger actions based on changes in variables or other conditions in your configuration.
+```hcl
+resource "null_resource" "custom_trigger" {
+  triggers = {
+    trigger_condition = var.some_variable
+  }
+
+  provisioner "local-exec" {
+    command = "echo Custom trigger executed"
+  }
+}
+```
+In this example, the null_resource will be recreated whenever the value of var.some_variable changes, and it will execute the specified command.
 Conditional expressions in Terraform provide a powerful way to make decisions and customize your infrastructure deployments based on various conditions and variables. They enhance the flexibility and reusability of your Terraform configurations.
