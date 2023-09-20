@@ -95,5 +95,5 @@ resource "null_resource" "custom_trigger" {
   }
 }
 ```
-In this example, the null_resource will be recreated whenever the value of var.some_variable changes, and it will execute the specified command.
+In this example, the `null_resource` will be recreated whenever the value of `var.some_variable` changes, and it will execute the specified command.
 Conditional expressions in Terraform provide a powerful way to make decisions and customize your infrastructure deployments based on various conditions and variables. They enhance the flexibility and reusability of your Terraform configurations.
