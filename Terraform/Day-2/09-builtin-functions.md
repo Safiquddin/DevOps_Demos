@@ -75,6 +75,11 @@ variable "my_map" {
 output "value" {
   value = lookup(var.my_map, "name") # Returns "Alice"
 }
+module "ec2_instance" {
+  source = "./modules/ec2_instance"
+  ami = var.ami
+  instance_type = lookup(var.instance_type, terraform.workspace, "t2.micro") # extract environment from current terraform workspace
+}
 ```
 
 6. `join(separator, list)`: Joins the elements of a list into a single string using the specified separator.
