@@ -1,0 +1,93 @@
+raised ISR Request
+
+
+
+
+Beweb cert update or where we have nginx installed------------
+
+1- to create CSR & Key run the below command-
+
+openssl req -out FQDN.csr -new -newkey rsa:2048 -nodes -keyout FQDN.key -sha256
+
+openssl req -out esalcoreprodf5.gdps.gov.sa.csr -new -newkey rsa:2048 -nodes -keyout esalcoreprodf5.gdps.gov.sa.key -sha256
+
+
+Note: in place of FQDN enter the LB hostname of beweb
+
+2- after running above command it will ask for some inputs-
+
+Country Name (2 letter code) [XX]:SA
+State or Province Name (full name) []:Riyadh
+Locality Name (eg, city) [Default City]:KAFD
+Organization Name (eg, company) [Default Company Ltd]:SaudiPayments
+Organizational Unit Name (eg, section) []:ESAL
+Common Name (eg, your name or your server's hostname) []:LB_hostname/keslfit1aut01.gdps.gov.sa 
+Email Address []:
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []: 
+An optional company name []:
+
+3- after that you will see two keys like below-
+
+LB_hostname.csr/keslfit1aut01.gdps.gov.sa.csr
+LB_hostname.key/keslfit1aut01.gdps.gov.sa.key
+
+4- Send the LB_hostname.csr to platforms and ask them to provide the certificate.
+
+5- once you get the certificate from platform, copy it to the server after validation.
+
+6- Place the cert and key in the location specified in /etc/nginx/conf.d/default.conf after taking the backup of old cert and key.
+
+7- use the same ownership and permission from previously addedd cert and key and also keep the same name for key and cert file.
+    
+8- restart the nginx 
+
+--------------------------------------------------------
+
+certificate installation steps where we have tomcat-
+
+1- repeat the same steps from above till 5 step
+
+2- convert the certificate from .cer to .pem using mv command.
+
+3- now we have to create jks file and for that we need create p12 file- follow the below commands to create p12 and jks file-
+
+openssl pkcs12 -export -in FQDN.pem -inkey FQDN.key -certfile FQDN.pem -out FQDN.p12 -name FQDN
+
+openssl pkcs12 -export -in esalcoreprodf5.gdps.gov.sa.pem -inkey esalcoreprodf5.gdps.gov.sa.key -certfile esalcoreprodf5.gdps.gov.sa.pem -out esalcoreprodf5.gdps.gov.sa.p12 -name esalcoreprodf5.gdps.gov.sa
+
+keytool -importkeystore -srckeystore esalcoreprodf5.gdps.gov.sa.p12 -srcstoretype pkcs12 -destkeystore esalcoreprodf5.gdps.gov.sa.jks -deststoretype JKS
+
+For SS--kesytore.jks
+keytool -importkeystore -srckeystore esalcoreprodf5.gdps.gov.sa.p12 -srcstoretype pkcs12 -destkeystore keystore.jks -deststoretype JKS
+
+4- now place the new jks to the required place, and correct place can be checked in server.xml.
+
+ 
+5- make sure to have same name of jks file what we have mentioned in server.xml file.
+
+6- use the same ownership and permission from previously addedd jks file.
+
+7- restart the tomcat.
+
+----------------------------------------------------
+certificate import in diffrent modules truststore----
+
+1- to check the truststore path run the command - 
+
+   find /opt -type f -name truststore
+
+2- go to the path and save the cert with any name, eg beweb.cer
+
+3- import and check the cert with below command-
+
+  keytool -import -alias datapower-PP -file datapower-PP.cer -keystore truststore -storepass Tomcat
+keytool -import -alias dpft2 -file keslfit2dp01.cer -keystore truststore -storepass Tomcat
+
+
+keytool -list -keystore truststore -storepass Tomcat -alias datapower-PP
+  
+
+
